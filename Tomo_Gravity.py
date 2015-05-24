@@ -1,4 +1,9 @@
-# This program uses Tomo-Gravity algorithm to produce hourly O-D (Origin-Destination) Matrix using link count data
+'''
+Created on Dec 2, 2014
+@author: sudatta0993
+'''
+# This program uses Tomo-Gravity algorithm (Zhang et al, 2003) to produce hourly O-D (Origin-Destination) Matrix using link count data
+# Algorithm: see https://www.cs.utexas.edu/~yzhang/papers/tomogravity-sigm03.pdf
 # Inputs:
 # 1. .csv file for Hourly link-count probabilities produced from PeMS sensor data by Emin
 # 2. .csv file for Initial estimate of daily O-D matrix (in this case, extracted from http://data5.ctpp.transportation.org/ctpp/Browse/browsetables.aspx)
@@ -10,14 +15,14 @@ import numpy as np
 import csv
 
 # Importing hourly probability matrix, link-route incidence matrix and initial daily O-D estimate
-p=np.genfromtxt('C:\Important Stuff\Berkeley\Preparation\MATSim SF Bay\Counts Analysis\Tomo-Gravity\Hourly_Probabilities.csv', delimiter=',', usecols=(0))
-A = np.genfromtxt('C:\Important Stuff\Berkeley\Preparation\MATSim SF Bay\Counts Analysis\Tomo-Gravity\Incidence_matrix.csv', delimiter=',')
+p=np.genfromtxt(sys.argv[1], delimiter=',', usecols=(0))
+A = np.genfromtxt(sys.argv[3], delimiter=',')
 A = A.T
-tg = np.genfromtxt('C:\Important Stuff\Berkeley\Preparation\MATSim SF Bay\Counts Analysis\Tomo-Gravity\Original OD.csv', delimiter=',', skiprows=1, usecols=(2))
+tg = np.genfromtxt(sys.argv[2], delimiter=',', skiprows=1, usecols=(2))
 # Iterating through each hour 
 for i in range(24):
     # Extracting link count for each hour
-    x = np.genfromtxt('C:\Important Stuff\Berkeley\Preparation\MATSim SF Bay\Counts Analysis\Tomo-Gravity\Simplified_network_final_link_counts.csv', delimiter=',', skiprows=1, usecols=(2+i))
+    x = np.genfromtxt(sys.argv[4], delimiter=',', skiprows=1, usecols=(2+i))
     # Initial hourly etimate of O-D flow
     tg = tg*p[i]
     #Executing Tomo-Gravity algorithm
